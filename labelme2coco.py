@@ -64,7 +64,7 @@ def to_coco(args, label_files, train):
     if train:
         out_ann_file = osp.join(args.o, "annotations", "instances_train2017.json")
     else:
-        out_ann_file = osp.join(args.o, "annotations", "instances_train2017.json")
+        out_ann_file = osp.join(args.o, "annotations", "instances_val2017.json")
 
     for image_id, filename in enumerate(label_files):
 
@@ -73,7 +73,7 @@ def to_coco(args, label_files, train):
         if train:
             out_img_file = osp.join(args.o, "train2017", base + ".jpg")
         else:
-            out_img_file = osp.join(args.o, "train2017", base + ".jpg")
+            out_img_file = osp.join(args.o, "val2017", base + ".jpg")
 
         print("| ", out_img_file)
 
@@ -90,9 +90,9 @@ def to_coco(args, label_files, train):
                 license=0,
                 url=None,
                 #不是yolo模型用这个
-                file_name=osp.relpath(out_img_file, osp.dirname(out_ann_file)),
+                #file_name=osp.relpath(out_img_file, osp.dirname(out_ann_file)),
                 #跑yolo模型需要json2txt，用这个
-                #file_name= base + ".jpg",
+                file_name= base + ".jpg",
                 #   out_img_file = "/coco/train2017/1.jpg"
                 #   out_ann_file = "/coco/annotations/annotations_train2017.json"
                 #   osp.dirname(out_ann_file) = "/coco/annotations"
@@ -211,8 +211,8 @@ def main():
         os.makedirs(osp.join(args.o, "annotations"))
     if not os.path.exists(osp.join(args.o, "train2017")):
         os.makedirs(osp.join(args.o, "train2017"))
-    if not os.path.exists(osp.join(args.o, "train2017")):
-        os.makedirs(osp.join(args.o, "train2017"))
+    if not os.path.exists(osp.join(args.o, "val2017")):
+        os.makedirs(osp.join(args.o, "val2017"))
 
     # 获取目录下所有的.jpg文件列表
     feature_files = glob.glob(osp.join(args.i, "*.jpg"))
@@ -224,7 +224,7 @@ def main():
 
     # feature_files:待划分的样本特征集合    label_files:待划分的样本标签集合    test_size:测试集所占比例
     # x_train:划分出的训练集特征      x_test:划分出的测试集特征     y_train:划分出的训练集标签    y_test:划分出的测试集标签
-    x_train, x_test, y_train, y_test = train_test_split(feature_files, label_files, test_size=0.2)
+    x_train, x_test, y_train, y_test = train_test_split(feature_files, label_files, test_size=0.0000000000001)
     print("| Train number:", len(y_train), '\t Value number:', len(y_test))
 
     # 把训练集标签转化为COCO的格式，并将标签对应的图片保存到目录 /train2017/

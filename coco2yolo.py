@@ -10,8 +10,8 @@ from tqdm import tqdm
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--json_path', default='/Volumes/My_Passport/LBT/DATASET/wire-dataset/现场/coco/annotations/instances_train2017.json', type=str, help="input: coco format(json)")
-parser.add_argument('--save_path', default='/Volumes/My_Passport/LBT/DATASET/wire-dataset/现场/yolo/train2017', type=str, help="specify where to save the output dir of labels")
+parser.add_argument('--json_path', default='/Volumes/My_Passport/coco/annotations/instances_train2017.json', type=str, help="input: coco format(json)")
+parser.add_argument('--save_path', default='/Volumes/My_Passport/coco/', type=str, help="specify where to save the output dir of labels")
 arg = parser.parse_args()
 
 
@@ -59,12 +59,13 @@ if __name__ == '__main__':
         img_height = img["height"]
         img_id = img["id"]
         head, tail = os.path.splitext(filename)
-        ana_txt_name = head + ".txt"  # 对应的txt名字，与jpg一致
+        #ana_txt_name = head + ".txt"  # 对应的txt名字，与jpg一致
+        ana_txt_name = "train2017.txt"
         f_txt = open(os.path.join(ana_txt_save_path, ana_txt_name), 'w')
 
         ann_img = anns.get(img_id, [])
         for ann in ann_img:
             box = convert((img_width, img_height), ann["bbox"])
 
-            f_txt.write("%s %s %s %s %s\n" % (id_map[int(ann["category_id"])-1], box[0], box[1], box[2], box[3]))
+            f_txt.write("%s %s %s %s %s\n" % (id_map[int(ann["category_id"])], box[0], box[1], box[2], box[3]))
         f_txt.close()
